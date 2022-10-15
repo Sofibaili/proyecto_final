@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from AppPower.models import Familiar
 
 # Create your views here.
 
@@ -28,3 +29,8 @@ def index_tres(request):
 def imc(request):
     imc = (60/1.6) #calcular el imc
     return render(request, 'AppPower/imc.html', {'imc': imc})
+
+def monstrar_familiares(request):
+  lista_familiares = Familiar.objects.all()
+  return render(request, "AppPower/familiares.html", {"lista_familiares": lista_familiares})
+  

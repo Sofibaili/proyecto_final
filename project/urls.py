@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from AppPower.views import index, index_dos, index_tres
-from AppPower.views import imc
+from AppPower.views import imc, monstrar_familiares
 
 
 urlpatterns = [
@@ -24,5 +24,6 @@ urlpatterns = [
     path('saludar/', index),
     path('saludar/<nombre>/<apellido>', index_dos),
     path('mostrar-notas/', index_tres),
-    path('mostrar-imc/', imc)
-]
+    path('mostrar-imc/', imc),
+    path('mi-familia/', monstrar_familiares),
+    ]
