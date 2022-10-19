@@ -1,5 +1,7 @@
 from django.shortcuts import render
 from AppPower.models import Familiar
+from AppPower.forms import Buscar # <--- NUEVO IMPORT
+from django.views import View # <-- NUEVO IMPORT 
 
 # Create your views here.
 
@@ -33,4 +35,24 @@ def imc(request):
 def monstrar_familiares(request):
   lista_familiares = Familiar.objects.all()
   return render(request, "AppPower/familiares.html", {"lista_familiares": lista_familiares})
-  
+ 
+class BuscarFamiliar(View):
+
+    form_class = Buscar
+    template_name = 'AppPower/buscar.html'
+    initial = {"nombre":""}
+
+    def get(self, request): #este e sun metodo. Recibo un get en el servidor inicializo un formulario con los valores que defino
+        form = self.form_class(initial=self.initial)
+        return render(request, self.template_name, {'form':form}) 
+
+    def post(self, request): #este es otro metodo. Recibe la info y s einicializa con los valores que fueron enviados 
+        form = self.form_class(request.POST)
+        if form.is_valid(): #chequea que no haya mas de 100 caracteres que lo definimos en forms. Si es valido extrago el valor del campo
+            nombre = form.cleaned_data.get("nombre")  
+            lista_familiares = Familiar.objects.filter(nombre__icontains=nombre).all() 
+            form = self.form_class(initial=self.initial)
+            return render(request, self.template_name, {'form':form, 
+                                                        'lista_familiares':lista_familiares})
+
+        return render(request, self.template_name, {"form": form})
