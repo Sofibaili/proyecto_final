@@ -6,3 +6,5 @@ Familiar(nombre="Samuel", direccion="Rio Parana 745", numero_pasaporte=345345).s
 Familiar(nombre="Florencia", direccion="Rio Parana 745", numero_pasaporte=567567).save()
 
 print("Se cargo con éxito los usuarios de pruebas")
+
+

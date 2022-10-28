@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from AppPower.models import Familiar
-from AppPower.forms import Buscar # <--- NUEVO IMPORT
-from django.views import View # <-- NUEVO IMPORT 
+from AppPower.forms import Buscar, FamiliarForm
+from django.views import View 
+
 
 # Create your views here.
 
@@ -56,3 +57,26 @@ class BuscarFamiliar(View):
                                                         'lista_familiares':lista_familiares})
 
         return render(request, self.template_name, {"form": form})
+
+class AltaFamiliar(View):
+
+    form_class = FamiliarForm
+    template_name = 'AppPower/alta_familiar.html'
+    initial = {"nombre":"", "direccion":"", "numero_pasaporte":""}
+
+    def get(self, request): #igual al de buscar, nada mas que va a recibir el formulario de familiar
+        form = self.form_class(initial=self.initial)
+        return render(request, self.template_name, {'form':form})
+
+    def post(self, request):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            form.save()
+            msg_exito = f"se cargo con éxito el familiar {form.cleaned_data.get('nombre')}"
+            form = self.form_class(initial=self.initial) #hay que incicializarlo de nuevo 
+            return render(request, self.template_name, {'form':form, 
+                                                        'msg_exito': msg_exito})
+        
+        return render(request, self.template_name, {"form": form})
+
+
